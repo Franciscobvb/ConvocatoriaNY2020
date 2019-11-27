@@ -385,9 +385,13 @@
 			$participante = 0;
 		@endphp
 
-		@foreach ($plaadel as $row)
-			@if ($row->Associateid == $associateid && $row->PuntosNY_10 >= 10)
-				@php $participante = 1; @endphp
+		@foreach ($winPuntosV as $row)
+			@if ($row->Associateid == $associateid && $row->Count_PuntosV >= 10)
+				@php 
+					$participante = 1; 
+					$lugarRank = null;
+				@endphp
+
 				<script>
 					function winner(){
 						swal({
@@ -398,7 +402,8 @@
 						})
 					}
 					
-					setTimeout('winner()',2000);
+					winner();
+					//setTimeout('winner()',2000);
 				</script>
 			@endif
 		@endforeach
@@ -555,19 +560,6 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<div class="col-md-12 mb-3" hidden>
-							<div class="row text-center">
-								<div class="col-md-4">
-									<span class="flaticon-play-bold badge-kaizen" style="font-size: 20px"></span> Participantes por Equipo Kaizen
-								</div>
-								<div class="col-md-4">
-									<span class="flaticon-play-bold badge-taishi" style="font-size: 20px"></span> Participantes por Equipo Taishi
-								</div>
-								<div class="col-md-4">
-									<span class="flaticon-play-bold badge-puntosV" style="font-size: 20px"></span> Participantes por Puntos Viaje 100%
-								</div>
-							</div>
-						</div>
 						<div class="col-md-12">
 							<div class="table-responsive mb-4">
 								<table id="html5-extension2" class="table table-hover" style="width:100%">
@@ -731,12 +723,6 @@
 						<div class="row ">
 							<div class="col-lg-5 text-center">
 								<img src="{{ asset('convassets/img/2.png')}}" width="50%">
-								<!--@if ($participante == 1)
-									<img src="{{ asset('convassets/img/2.png')}}" width="50%">
-								@else
-									<span class="flaticon-warning mt-5 text-warning"></span>
-									<h2 class="mt-3">No Participas en la convocatoria</h2>
-								@endif-->
 							</div>
 							<div class="col-lg-7">
 								<div class="row">
@@ -802,7 +788,21 @@
 														<b>Tipo de convocatoria</b>
 													</span>
 												</div>
-												<input type="text" class="form-control-rounded-right form-control" value="{{ ($row->Rango_ini < 5) ? "Directo a Ejecutivo" : "Plata en Adelante" }}" readonly>
+												@php
+													if($row->Rango_ini < 5) { 
+														$tipoConvocatoria = "Directo a Ejecutivo";
+														$lugarRankFormat = "# " . $lugarRank;
+													} 
+													else{
+														$tipoConvocatoria = "Plata en Adelante";
+														$lugarRankFormat = "# " . $lugarRank;
+													}
+													if(empty($lugarRank)){
+														$tipoConvocatoria = "Puntos Viaje 100%";
+														$lugarRank = "";
+													}
+												@endphp
+												<input type="text" class="form-control-rounded-right form-control" value="{{ $tipoConvocatoria }}" readonly>
 											</div>
 										</div>
 										<div class="col-lg-6">
@@ -812,12 +812,7 @@
 														<b>Lugar Ranking</b>
 													</span>
 												</div>
-												<input type="text" class="form-control-rounded-right form-control" value="# {{ $lugarRank }}" readonly>
-												<!--@if ($participante == 1)
-													<input type="text" class="form-control-rounded-right form-control" value="# {{ $lugarRank }}" readonly>
-												@else
-													<input type="text" class="form-control" readonly value="No Participas">
-												@endif-->
+												<input type="text" class="form-control-rounded-right form-control" value="{{ $lugarRank }}" readonly>
 											</div>
 										</div>
 									@endforeach
