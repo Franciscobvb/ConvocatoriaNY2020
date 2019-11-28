@@ -1069,7 +1069,7 @@
 															<li>VP 1,500 Acumulados en el periodo de la convocatoria.</li>
 															<li>VGP 8000 Acumulados en el periodo de la convocatoria.</li>
 															<li>Incorporar 2 asesores (Frontales) durante el periodo de la convocatoria, hacer 100 puntos en un mes calendario.</li>
-															<li>Que al menos 2 asesores de su grupo personal califiquen el KinYa!.</li>
+															<li>Que al menos 2 asesores de su grupo personal califiquen el KinYa! (No cuentan los kinya personales).</li>
 															<li><b>Estar dentro de los primeros 30 lugares del ranking.</b></li>
 															<li><b>Este ranking es solo rangos directos y ejecutivos.</b></li>
 														</ul>
@@ -1144,7 +1144,7 @@
 															<li>VP 1,500 Acumulados en el periodo de la convocatoria.</li>
 															<li>VGP 8000 Acumulados en el periodo de la convocatoria.</li>
 															<li>Incorporar 2 asesores (Frontales) durante el periodo de la convocatoria, hacer 100 puntos en un mes calendario.</li>
-															<li>Que al menos 2 asesores de su grupo personal califiquen el KinYa!.</li>
+															<li>Que al menos 2 asesores de su grupo personal califiquen el KinYa!  (No cuentan los kinya personales).</li>
 															<li><b>No necesario aparecer en el ranking.</b></li>
 														</ul>
 													</div>
@@ -1337,7 +1337,7 @@
 																</tbody>
 															</table>
 														</div>
-														<li>Mínimo 2 asesores de su grupo personal que califiquen el KinYa! durante el periodo de la convocatoria. </li>
+														<li>Mínimo 2 asesores de su grupo personal que califiquen el KinYa! durante el periodo de la convocatoria (No cuentan los kinya personales). </li>
 														<li><b>Estar dentro de los primeros 90 lugares del ranking.</b></li>
 														<li><b>Este ranking es solo rangos Plata, Oro, Platino, Diamante y Diamante Real.</b></li>
 													</div>
@@ -1503,7 +1503,7 @@
 																</tbody>
 															</table>
 														</div>
-														<li>Mínimo 2 asesores de su grupo personal que califiquen el KinYa! durante el periodo de la convocatoria. </li>
+														<li>Mínimo 2 asesores de su grupo personal que califiquen el KinYa! durante el periodo de la convocatoria (No cuentan los kinya personales). </li>
 														<li><b>No es necesario aparecer en el ranking.</b></li>
 														<li><b>Este ranking es solo rangos Plata, Oro, Platino, Diamante y Diamante Real.</b></li>
 													</div>
@@ -1696,7 +1696,7 @@
 																</tbody>
 															</table>
 														</div>
-														<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria. </li>
+														<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria. (No cuentan los kinya personales)</li>
 														<li><b>Estar dentro de los primeros 90 lugares del ranking.</b></li>
 														<li><b>Tendrán una ventaja de 6,000 VGP para el ranking.</b></li>
 														<li><b>Este ranking es solo rangos Plata, Oro, Platino, Diamante y Diamante Real.</b></li>
@@ -2057,7 +2057,7 @@
 																</tbody>
 															</table>
 														</div>
-														<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria. </li>
+														<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria (No cuentan los kinya personales). </li>
 														<li><b>Estar dentro de los primeros 90 lugares del ranking.</b></li>
 														<li><b>Tendrán una ventaja de 9,000 VGP para el ranking.</b></li>
 														<li><b>Este ranking es solo rangos Plata, Oro, Platino, Diamante y Diamante Real.</b></li>
@@ -2225,7 +2225,7 @@
 																</tbody>
 															</table>
 														</div>
-														<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria. </li>
+														<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria (No cuentan los kinya personales).</li>
 														<li><b>No es necesario aparecer en el ranking.</b></li>
 													</div>
 													<div class="col-md-6 premios prl">
@@ -2401,7 +2401,7 @@
 										</tbody>
 									</table>
 								</div>
-								<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria. </li>
+								<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria (No cuentan los kinya personales). </li>
 								<li><b>No es necesario aparecer en el ranking.</b></li>
 							</div>
 							<div class="col-md-6 premios prl text-center">
