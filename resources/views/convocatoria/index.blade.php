@@ -356,6 +356,12 @@
 						<p class="mb-4 mt-5">NIKKEN se reserva el derecho de interpretación de la convocatoria.</p>
 					</div>
 
+					<div class="col-xl-4 col-lg-4 col-md-4 site-content-inner text-center"></div>
+					<div class="col-xl-4 col-lg-4 col-md-4 site-content-inner text-center">
+						<i class="flaticon-error"></i>
+						<p class="mb-4 mt-5">Para el requisito de KinYa! solo cuentan asesores de grupo, No cuentan los KinYa! personales. </p>
+					</div>
+
 				</div>
 			</div>
 		</div>
