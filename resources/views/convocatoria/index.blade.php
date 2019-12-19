@@ -359,7 +359,7 @@
 					<div class="col-xl-4 col-lg-4 col-md-4 site-content-inner text-center"></div>
 					<div class="col-xl-4 col-lg-4 col-md-4 site-content-inner text-center">
 						<i class="flaticon-error"></i>
-						<p class="mb-4 mt-5">Para el requisito de KinYa! solo cuentan asesores de grupo, No cuentan los KinYa! personales. </p>
+						<p class="mb-4 mt-5">Para el requisito de KinYa! solo cuentan Asesores de grupo personal, no cuentan los KinYa! personales. </p>
 					</div>
 
 				</div>
@@ -736,7 +736,7 @@
 										<h6>Periodo de la convocatoria: <b>Noviembre 2019 a  Enero 2020.</b></h6>
 										<h6>Fecha de actualizacion: {{ $dia }} de {{ $meses[$mesnum] }} a las <span id="hora"></span> hora México.</h6>
 									</div>
-									@foreach ($estatuspersonal as $row)
+									@foreach ($estatuspersonalFormInfo as $row)
 										<div class="col-lg-12">
 											<div class="input-group mb-4">
 												<div class="input-group-prepend">
@@ -781,7 +781,7 @@
 											<div class="input-group mb-4">
 												<div class="input-group-prepend">
 													<span class="input-group-text form-control-rounded-left">
-														VGP Nov-Dic-Ene
+														VGP {{ $meses[$mesnum] }}
 													</span>
 												</div>
 												<input type="text" class="form-control-rounded-right form-control" readonly value="{{ number_format($row->VGPAcumulado) }}">
@@ -832,13 +832,14 @@
 												<tr class="table-primary">
 													<th>REQUISITOS </th>
 													<th class="text-center">Nov-19</th>
-													<th hidden class="text-center">Dic-19</th>
+													<th class="text-center">Dic-19</th>
 													<th hidden class="text-center">Ene-20</th>
 													<th class="text-center">Acumulado</th>
 												</tr>
 											</thead>
 											<tbody>
 												@foreach ($estatuspersonal as $avance)
+													@php $break = 0 @endphp
 													@if ($avance->Rango_ini < 5)
 														<tr>
 															<td>
@@ -851,8 +852,12 @@
 																	<span class="flaticon-close-fill" style="color: red; font-size: 20px;"></span>
 																@endif
 															</td>
-															<td hidden class="text-center">
-																
+															<td class="text-center">
+																@if ($avance->Rango_max > $avance->Rango_ini)
+																	<span class="flaticon-fill-tick" style="color: darkcyan; font-size: 20px;"></span>
+																@else
+																	<span class="flaticon-close-fill" style="color: red; font-size: 20px;"></span>
+																@endif
 															</td>
 															<td hidden class="text-center">
 																
@@ -860,22 +865,32 @@
 															<td></td>
 														</tr>
 													@endif
+													@php $break++ @endphp
+													@if ($break > 0)
+														@break
+													@endif
 												@endforeach
 												<tr class="table-success">
 													<td>
 														100 DE VP CADA MES 
 													</td>
 													<td class="text-center">
-														@foreach ($estatuspersonal as $vp)
-															@if ($vp->VP_Mes >= 100)
+														@foreach ($vpperiodo1 as $vp)
+															@if ($vp->VP_MES >= 100)
 																<span class="flaticon-fill-tick" style="color: darkcyan; font-size: 20px;"></span>
 															@else
 																<span class="flaticon-close-fill" style="color: red; font-size: 20px;"></span>
 															@endif
 														@endforeach
 													</td>
-													<td hidden class="text-center">
-														
+													<td class="text-center">
+														@foreach ($vpperiodo2 as $vp)
+															@if ($vp->VP_MES >= 100)
+																<span class="flaticon-fill-tick" style="color: darkcyan; font-size: 20px;"></span>
+															@else
+																<span class="flaticon-close-fill" style="color: red; font-size: 20px;"></span>
+															@endif
+														@endforeach
 													</td>
 													<td hidden class="text-center">
 														
@@ -891,8 +906,10 @@
 															{{ number_format($vpmes->VP_MES) }}
 														@endforeach
 													</td>
-													<td hidden class="text-center">
-														0
+													<td class="text-center">
+														@foreach ($vpperiodo2 as $vpmes)
+															{{ number_format($vpmes->VP_MES) }}
+														@endforeach
 													</td>
 													<td hidden class="text-center">
 														0
@@ -906,12 +923,15 @@
 													<td class="text-center">
 														@php $vgp_final = 0; @endphp
 														@foreach ($vgpperiodo1 as $vgpmes)
-															@php $vgp_final = $vgp_final + $vgpmes->VGPAcumulado; @endphp
-															{{ number_format($vgpmes->VGPAcumulado) }}
+															@php $vgp_final = $vgp_final + $vgpmes->VGP_MES; @endphp
+															{{ number_format($vgpmes->VGP_MES) }}
 														@endforeach
 													</td>
-													<td hidden class="text-center">
-														0
+													<td class="text-center">
+														@foreach ($vgpperiodo2 as $vgpmes)
+															@php $vgp_final = $vgp_final + $vgpmes->VGP_MES; @endphp
+															{{ number_format($vgpmes->VGP_MES) }}
+														@endforeach
 													</td>
 													<td hidden class="text-center">
 														0
@@ -927,12 +947,15 @@
 													<td class="text-center">
 														@php $total_incorp = 0; @endphp
 														@foreach ($incorporadosperiodo1 as $incorp)
-															@php $total_incorp = $total_incorp + $incorp->Incorp_VP100; @endphp
-															{{ number_format($incorp->Incorp_VP100) }}
+															@php $total_incorp = $total_incorp + $incorp->Incorp_VP100_Mes; @endphp
+															{{ number_format($incorp->Incorp_VP100_Mes) }}
 														@endforeach
 													</td>
-													<td hidden class="text-center">
-														0
+													<td  class="text-center">
+														@foreach ($incorporadosperiodo2 as $incorp)
+															@php $total_incorp = $total_incorp + $incorp->Incorp_VP100_Mes; @endphp
+															{{ number_format($incorp->Incorp_VP100_Mes) }}
+														@endforeach
 													</td>
 													<td hidden class="text-center">
 														0
@@ -948,12 +971,15 @@
 													<td class="text-center">
 														@php $total_kinya = 0; @endphp
 														@foreach ($kinyaperiodo1 as $kinya)
-															@php $total_kinya = $total_kinya + $kinya->KINYA_GP; @endphp
-															{{ number_format($kinya->KINYA_GP) }}
+															@php $total_kinya = $total_kinya + $kinya->KINYA_GP_Mes; @endphp
+															{{ number_format($kinya->KINYA_GP_Mes) }}
 														@endforeach
 													</td>
-													<td hidden class="text-center">
-														0
+													<td class="text-center">
+														@foreach ($kinyaperiodo2 as $kinya)
+															@php $total_kinya = $total_kinya + $kinya->KINYA_GP_Mes; @endphp
+															{{ number_format($kinya->KINYA_GP_Mes) }}
+														@endforeach
 													</td>
 													<td hidden class="text-center">
 														0
@@ -1075,7 +1101,7 @@
 															<li>VP 1,500 Acumulados en el periodo de la convocatoria.</li>
 															<li>VGP 8000 Acumulados en el periodo de la convocatoria.</li>
 															<li>Incorporar 2 asesores (Frontales) durante el periodo de la convocatoria, hacer 100 puntos en un mes calendario.</li>
-															<li>Que al menos 2 asesores de su grupo personal califiquen el KinYa! (No cuentan los kinya personales).</li>
+															<li>Que al menos 2 asesores de su grupo personal califiquen el KinYa! (No cuentan los KinYa! personales).</li>
 															<li><b>Estar dentro de los primeros 30 lugares del ranking.</b></li>
 															<li><b>Este ranking es solo rangos directos y ejecutivos.</b></li>
 														</ul>
@@ -1150,7 +1176,7 @@
 															<li>VP 1,500 Acumulados en el periodo de la convocatoria.</li>
 															<li>VGP 8000 Acumulados en el periodo de la convocatoria.</li>
 															<li>Incorporar 2 asesores (Frontales) durante el periodo de la convocatoria, hacer 100 puntos en un mes calendario.</li>
-															<li>Que al menos 2 asesores de su grupo personal califiquen el KinYa!  (No cuentan los kinya personales).</li>
+															<li>Que al menos 2 asesores de su grupo personal califiquen el KinYa!  (No cuentan los KinYa! personales).</li>
 															<li><b>No necesario aparecer en el ranking.</b></li>
 														</ul>
 													</div>
@@ -1343,7 +1369,7 @@
 																</tbody>
 															</table>
 														</div>
-														<li>Mínimo 2 asesores de su grupo personal que califiquen el KinYa! durante el periodo de la convocatoria (No cuentan los kinya personales). </li>
+														<li>Mínimo 2 asesores de su grupo personal que califiquen el KinYa! durante el periodo de la convocatoria (No cuentan los KinYa! personales). </li>
 														<li><b>Estar dentro de los primeros 90 lugares del ranking.</b></li>
 														<li><b>Este ranking es solo rangos Plata, Oro, Platino, Diamante y Diamante Real.</b></li>
 													</div>
@@ -1509,7 +1535,7 @@
 																</tbody>
 															</table>
 														</div>
-														<li>Mínimo 2 asesores de su grupo personal que califiquen el KinYa! durante el periodo de la convocatoria (No cuentan los kinya personales). </li>
+														<li>Mínimo 2 asesores de su grupo personal que califiquen el KinYa! durante el periodo de la convocatoria (No cuentan los KinYa! personales). </li>
 														<li><b>No es necesario aparecer en el ranking.</b></li>
 														<li><b>Este ranking es solo rangos Plata, Oro, Platino, Diamante y Diamante Real.</b></li>
 													</div>
@@ -1702,7 +1728,7 @@
 																</tbody>
 															</table>
 														</div>
-														<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria. (No cuentan los kinya personales)</li>
+														<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria. (No cuentan los KinYa! personales)</li>
 														<li><b>Estar dentro de los primeros 90 lugares del ranking.</b></li>
 														<li><b>Tendrán una ventaja de 6,000 VGP para el ranking.</b></li>
 														<li><b>Este ranking es solo rangos Plata, Oro, Platino, Diamante y Diamante Real.</b></li>
@@ -1711,7 +1737,7 @@
 														<hr>
 													</div>
 													<div class="col-md-6 premios prl">
-														<h2 class="mb-4">EL PREMIO NIVEL 1, INCLUYE</h2>
+														<h2 class="mb-4 text-center">EL PREMIO NIVEL 1, INCLUYE</h2>
 														<div class="row">
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/alojamiento-hotel.png')}}" width="12%">
@@ -1748,7 +1774,7 @@
 														</div>
 													</div>
 													<div class="col-md-6 premios prr">
-														<h2 class="mb-4">NO INCLUYE</h2>
+														<h2 class="mb-4 text-center">NO INCLUYE</h2>
 														<div class="row">
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/tiquetes-aereos.png')}}" width="12%">
@@ -1870,7 +1896,7 @@
 																</tbody>
 															</table>
 														</div>
-														<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria. </li>
+														<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria. (No cuentan los KinYa! personales)</li>
 														<li><b>No es necesario aparecer en el ranking.</b></li>
 													</div>
 													<div class="col-md-6 premios prl">
@@ -2063,7 +2089,7 @@
 																</tbody>
 															</table>
 														</div>
-														<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria (No cuentan los kinya personales). </li>
+														<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria (No cuentan los KinYa! personales). </li>
 														<li><b>Estar dentro de los primeros 90 lugares del ranking.</b></li>
 														<li><b>Tendrán una ventaja de 9,000 VGP para el ranking.</b></li>
 														<li><b>Este ranking es solo rangos Plata, Oro, Platino, Diamante y Diamante Real.</b></li>
@@ -2072,11 +2098,11 @@
 														<hr>
 													</div>
 													<div class="col-md-6 premios prl text-center">
-														<h2 class="mb-4">EL PREMIO NIVEL 1, INCLUYE</h2>
+														<h2 class="mb-4 text-center">EL PREMIO NIVEL 1, INCLUYE</h2>
 														<div class="row">
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/alojamiento-hotel.png')}}" width="12%">
-																<p class="mb-1 mt-1">Alojamiento en acomodación doble en el <b>Hotel Sheraton de Times Square (7 días y 6 noches).</b></p>
+																<p class="mb-1 mt-1">Alojamiento en acomodación doble en el <b>Hotel Sheraton de Times Square (8 días y 7 noches).</b></p>
 															</div>
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/entrada-convencion.png')}}" width="12%">
@@ -2109,7 +2135,7 @@
 														</div>
 													</div>
 													<div class="col-md-6 premios prr text-center">
-														<h2 class="mb-4">NO INCLUYE</h2>
+														<h2 class="mb-4 text-center">NO INCLUYE</h2>
 														<div class="row">
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/tiquetes-aereos.png')}}" width="12%">
@@ -2231,11 +2257,11 @@
 																</tbody>
 															</table>
 														</div>
-														<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria (No cuentan los kinya personales).</li>
+														<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria (No cuentan los KinYa! personales).</li>
 														<li><b>No es necesario aparecer en el ranking.</b></li>
 													</div>
 													<div class="col-md-6 premios prl">
-														<h2 class="mb-4">EL PREMIO NIVEL 2, INCLUYE</h2>
+														<h2 class="mb-4 text-center">EL PREMIO NIVEL 2, INCLUYE</h2>
 														<div class="row">
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/alojamiento-hotel.png')}}" width="12%">
@@ -2260,7 +2286,7 @@
 														</div>
 													</div>
 													<div class="col-md-6 premios prr">
-														<h2 class="mb-4">NO INCLUYE</h2>
+														<h2 class="mb-4 text-center">NO INCLUYE</h2>
 														<div class="row">
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/tiquetes-aereos.png')}}" width="12%">
@@ -2407,7 +2433,7 @@
 										</tbody>
 									</table>
 								</div>
-								<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria (No cuentan los kinya personales). </li>
+								<li>Mínimo 2 asesores de su grupo personal que califiquen el <b>KinYa!</b> durante el periodo de la convocatoria (No cuentan los KinYa! personales). </li>
 								<li><b>No es necesario aparecer en el ranking.</b></li>
 							</div>
 							<div class="col-md-6 premios prl text-center">
@@ -2575,4 +2601,15 @@
 
 		setHora();
 	</script>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-153499974-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-153499974-1');
+	</script>
+
 </html>
