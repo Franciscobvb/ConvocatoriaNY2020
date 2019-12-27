@@ -534,7 +534,13 @@
 													{{ $pais }}
 												</td>
 												<td>{{ number_format($row->VP_Mes) }}</td>
-												<td>{{ $row->Ascensos }}</td>
+												<td class="text-center">
+													@if ($row->Ascensos != 1)
+														<span class="flaticon-close-fill" style="color: red; font-size: 20px;"></span>
+													@else
+														<span class="flaticon-fill-tick" style="color: darkcyan; font-size: 20px;"></span>
+													@endif
+												</td>
 												<td>{{ number_format($row->VpAcumulado) }}</td>
 												<td>{{ number_format($row->VGPAcumulado) }}</td>
 												<td>{{ $row->Incorpor_Frontal }}</td>
