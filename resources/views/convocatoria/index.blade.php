@@ -727,10 +727,11 @@
 							setlocale(LC_TIME, 'es_ES');
 							$dia = Date('d');
 							$mes = Date('m');
-							$meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Abril', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+							$meses = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Abril', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 							$mes = DateTime::createFromFormat('!m', $mes);
 							$mes = strftime("%B", $mes->getTimestamp());
 							$mesnum = Date('m');
+							$mesnum = str_replace('0', '', $mesnum);
 						@endphp
 						<div class="row ">
 							<div class="col-lg-5 text-center">
@@ -839,7 +840,7 @@
 													<th>REQUISITOS </th>
 													<th class="text-center">Nov-19</th>
 													<th class="text-center">Dic-19</th>
-													<th hidden class="text-center">Ene-20</th>
+													<th class="text-center">Ene-20</th>
 													<th class="text-center">Acumulado</th>
 												</tr>
 											</thead>
@@ -865,8 +866,12 @@
 																	<span class="flaticon-close-fill" style="color: red; font-size: 20px;"></span>
 																@endif
 															</td>
-															<td hidden class="text-center">
-																
+															<td class="text-center">
+																@if ($avance->Rango_max > $avance->Rango_ini)
+																	<span class="flaticon-fill-tick" style="color: darkcyan; font-size: 20px;"></span>
+																@else
+																	<span class="flaticon-close-fill" style="color: red; font-size: 20px;"></span>
+																@endif
 															</td>
 															<td></td>
 														</tr>
@@ -898,8 +903,14 @@
 															@endif
 														@endforeach
 													</td>
-													<td hidden class="text-center">
-														
+													<td class="text-center">
+														@foreach ($vpperiodo3 as $vp)
+															@if ($vp->VP_MES >= 100)
+																<span class="flaticon-fill-tick" style="color: darkcyan; font-size: 20px;"></span>
+															@else
+																<span class="flaticon-close-fill" style="color: red; font-size: 20px;"></span>
+															@endif
+														@endforeach
 													</td>
 													<td></td>
 												</tr>
@@ -917,8 +928,10 @@
 															{{ number_format($vpmes->VP_MES) }}
 														@endforeach
 													</td>
-													<td hidden class="text-center">
-														0
+													<td class="text-center">
+														@foreach ($vpperiodo3 as $vpmes)
+															{{ number_format($vpmes->VP_MES) }}
+														@endforeach
 													</td>
 													<td></td>
 												</tr>
@@ -939,8 +952,11 @@
 															{{ number_format($vgpmes->VGP_MES) }}
 														@endforeach
 													</td>
-													<td hidden class="text-center">
-														0
+													<td class="text-center">
+														@foreach ($vgpperiodo3 as $vgpmes)
+															@php $vgp_final = $vgp_final + $vgpmes->VGP_MES; @endphp
+															{{ number_format($vgpmes->VGP_MES) }}
+														@endforeach
 													</td>
 													<td class="text-center">
 														{{ number_format($vgp_final) }}
@@ -963,8 +979,11 @@
 															{{ number_format($incorp->Incorp_VP100_Mes) }}
 														@endforeach
 													</td>
-													<td hidden class="text-center">
-														0
+													<td class="text-center">
+														@foreach ($incorporadosperiodo3 as $incorp)
+															@php $total_incorp = $total_incorp + $incorp->Incorp_VP100_Mes; @endphp
+															{{ number_format($incorp->Incorp_VP100_Mes) }}
+														@endforeach
 													</td>
 													<td class="text-center">
 														{{ $total_incorp }}
@@ -987,8 +1006,11 @@
 															{{ number_format($kinya->KINYA_GP_Mes) }}
 														@endforeach
 													</td>
-													<td hidden class="text-center">
-														0
+													<td class="text-center">
+														@foreach ($kinyaperiodo3 as $kinya)
+															@php $total_kinya = $total_kinya + $kinya->KINYA_GP_Mes; @endphp
+															{{ number_format($kinya->KINYA_GP_Mes) }}
+														@endforeach
 													</td>
 													<td class="text-center">
 														{{ $total_kinya }}
