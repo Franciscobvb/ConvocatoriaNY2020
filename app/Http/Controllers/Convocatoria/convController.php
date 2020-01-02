@@ -17,7 +17,7 @@ class convController extends Controller{
 
             $vpperiodo1 = $conection->select("SELECT VP_MES FROM RankingGral WHERE Associateid = $associateid AND period = 201911;");
             $vpperiodo2 = $conection->select("SELECT VP_MES FROM RankingGral WHERE Associateid = $associateid AND period = 201912;");
-            $vpperiodo3 = $conection->select("SELECT VP_MES FROM RankingGral WHERE Associateid = $associateid AND period = 201912;");
+            $vpperiodo3 = $conection->select("SELECT VP_MES FROM RankingGral WHERE Associateid = $associateid AND period = 202001;");
 
             $vgpperiodo1 = $conection->select("SELECT VGP_MES FROM RankingGral WHERE Associateid = $associateid AND period = 201911;");
             $vgpperiodo2 = $conection->select("SELECT VGP_MES FROM RankingGral WHERE Associateid = $associateid AND period = 201912;");
