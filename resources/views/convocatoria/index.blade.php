@@ -156,7 +156,7 @@
 			}
 		</style>
 	</head>
-	<body>
+	<body onload="$('#genealogiaPersonal').hide(); $('#genealogiaOrganizacional').hide();">
 		<div id="navHeadWrapper" class="navHeaderWrapper header-image">
 			<div class="">
 				<nav class="navbar navbar-expand-lg bg-faded header-nav">
@@ -389,6 +389,7 @@
 		@php
 			$lugarRank = 0;
 			$participante = 0;
+			$tippoConvocatoria = "";
 		@endphp
 
 		@foreach ($winPuntosV as $row)
@@ -717,7 +718,7 @@
 			<div class="modal-dialog modal-xl" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="myExtraLargeModalLabel">RANKING CONVOCATORIA 45 ANIVERSARIO- NUEVA YORK 2020</h5>
+						<h5 class="modal-title" id="myExtraLargeModalLabel">RANKING CONVOCATORIA 45 ANIVERSARIO- NUEVA YORK 20202222</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span class="flaticon-close-fill" aria-hidden="true" style="color: black;"></span>
 						</button>
@@ -810,12 +811,22 @@
 														$tipoConvocatoria = "Plata en Adelante";
 														$lugarRankFormat = "# " . $lugarRank;
 													}
-													if(empty($lugarRank)){
+
+													if($participante == 1){
 														$tipoConvocatoria = "Puntos Viaje 100%";
+													}
+													else if(empty($lugarRank)){
+														$tipoConvocatoria = "No participa";
 														$lugarRank = "";
 													}
 												@endphp
 												<input type="text" class="form-control-rounded-right form-control" value="{{ $tipoConvocatoria }}" readonly>
+												<li>
+													<a href="http://services.nikken.com.mx/repoconvny" target="_new">
+														<i class="fa fa-circle-o text-danger"></i> 
+														Convocatoria Nueva York 
+													</a>
+												</li>
 											</div>
 										</div>
 										<div class="col-lg-6">
@@ -831,7 +842,7 @@
 									@endforeach
 								</div>
 							</div>
-							<div class="col-md-12 mt-5 mb-5">
+							<div class="col-md-12 mt-5">
 								<div class="col-md-12">
 									<div class="table-responsive mb-4">
 										<table id="html5-extension5" class="table table-striped table-bordered table-hover" style="width:100%">
@@ -1024,57 +1035,79 @@
 									<a href="http://services.nikken.com.mx/points-ny/{{ base64_encode($associateid) }}" target="_new" class="btn btn-default btn-rounded pt-3 pb-3 pl-5 pr-5 mt-3" role="button">
 										Micrositio Puntos Viaje
 									</a>
+									<a href="javascript:void(0)" class="btn btn-default btn-rounded pt-3 pb-3 pl-5 pr-5 mt-3" role="button" onclick="$('#genealogiaPersonal').show(1000);">
+										Genealogía - Grupo personal
+									</a>
+									<a href="javascript:void(0)" class="btn btn-default btn-rounded pt-3 pb-3 pl-5 pr-5 mt-3" role="button" onclick="$('#genealogiaOrganizacional').show(1000)">
+										Genealogía - Organizacional
+									</a>
 								</div>
 								
-								<div class="col-md-12 text-center mt-5" hidden>
-									<h2>Mi Genealogia Organizacional. </h2>
+								<hr>
+
+								<div class="col-md-12 mt-5" id="genealogiaPersonal" >
+									<h2 class="text-center">Mi Genealogia Grupo Personal. </h2>
+									<div class="row">
+										<div class="col-md-12 mt-3">
+											<div class="table-responsive mb-4">
+												<table id="html5-extension3" class="table table-striped table-bordered table-hover text-center" >
+													<thead>
+														<tr class="text-center">
+															<th>Código</th>
+															<th>Nivel</th>
+															<th><p style="width: 150px;">Nombre</p></th>
+															<th>Rango Inicial</th>
+															<th>País</th>
+															<th>Ascensos</th>
+															<th>Rango Actual</th>
+															<th>VP Acumulado</th>
+															<th>VGP Acumulado</th>
+															<th>Puntos VGP</th>
+															<th>VGP Retos</th>
+															<th>VGP Ranking</th>
+															<th>Incorporados Frontales</th>
+															<th>Incorporados con VP 100</th>
+															<th>KinYa! - Grupo Personal</th>
+															<th>Tipo de convocatoria</th>
+															<th>Participando en la convocatoria</th>
+														</tr>
+													</thead>
+												</table>
+											</div>
+										</div>
+									</div>
 								</div>
 
-								<div class="col-md-12 mt-3" id="genealogiaOrganizacional" hidden>
-									<div class="table-responsive mb-4">
-                                        <table id="html5-extension3" class="table table-striped table-bordered table-hover" >
-                                            <thead>
-                                                <tr class="text-center">
-                                                    <th>Código</th>
-                                                    <th>Nivel</th>
-                                                    <th>Nombre</th>
-                                                    <th>Rango Inicial</th>
-                                                    <th>Rango Actual</th>
-                                                    <th>País</th>
-                                                    <th>VP Acumulado</th>
-                                                    <th>VGP Acumulado</th>
-                                                    <th>Incorporados Frontales</th>
-													<th>Incorporados con VP 100</th>
-													<th>KinYa! - Grupo Personal</th>
-                                                    <th>Tipo Convocatoria</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-												@if (!empty($genealogia))
-													@foreach ($genealogia as $gen)
-														<tr>
-															<td>{{ $gen->associateid }}</td>
-															<td>{{ $gen->nivel }}</td>
-															<td>{{ $gen->NameAssociate }}</td>
-															<td>{{ $gen->Rango_ini }}</td>
-															<td>{{ $gen->Rango_max }}</td>
-															<td>{{ $gen->Pais }}</td>
-															<td>{{ $gen->VpAcumulado }}</td>
-															<td>{{ $gen->VGPAcumulado }}</td>
-															<td>{{ $gen->Total_Incorpo }}</td>
-															<td>{{ $gen->Incorp_VP100 }}</td>
-															<td>{{ $gen->KINYA_GP }}</td>
-															@if ($gen->Rango_ini < 5)
-																<td>Directos a Ejecutivos</td>
-															@else
-																<td>Platas en adelante</td>
-															@endif
+								<hr>
+
+								<div class="col-md-12 mt-5" id="genealogiaOrganizacional" >
+									<h2 class="text-center">Mi Genealogia Organizacional. </h2>
+									<div class="row">
+										<div class="col-md-12 mt-3">
+											<div class="table-responsive mb-4">
+												<table id="html5-extension4" class="table table-striped table-bordered table-hover text-center" >
+													<thead>
+														<tr class="text-center">
+															<th>Código</th>
+															<th>Código Patrocinador</th>
+															<th>Nivel</th>
+															<th><p style="width: 150px;">Nombre</p></th>
+															<th>País</th>
+															<th>Rango Inicial</th>
+															<th>Rango Actual</th>
+															<th>VP Acumulado</th>
+															<th>VGP Acumulado</th>
+															<th>Incorporados Frontales</th>
+															<th>Incorporados con VP 100</th>
+															<th>KinYa! - Grupo Personal</th>
+															<th>Tipo de convocatoria</th>
+															<th>Estatus</th>
 														</tr>
-													@endforeach
-												@endif
-                                            </tbody>
-                                        </table>
-                                    </div>
+													</thead>
+												</table>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -2555,7 +2588,7 @@
 	<script src="{{asset('convassets/plugins/table/datatable/button-ext/buttons.print.min.js')}}"></script>
 
 	<script>
-		$('#html5-extension').DataTable( {
+		$('#html5-extension').DataTable({
 			dom: 'Bfrtip',
 			buttons: [
 				{ 
@@ -2571,30 +2604,17 @@
 				"url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
 			},
 			
-		} );
+		});
 
-		$('#html5-extension2').DataTable( {
-			dom: 'Bfrtip',
-			buttons: [
-				{ 
-					extend: 'excel', className: 'btn btn-rounded btn-sm btnExcel', text:"<img src='http://services.nikken.com.mx/retos/img/excel.png' width='15px'></img> Exportar a Excel",
-					title: 'CONVOCATORIA NUEVA YORK  |  RANKING PLATA, ORO, PLATINO, DIAMANTE Y DIAMANTE REAL',
-					customize: function( xlsx ) {
-						var sheet = xlsx.xl.worksheets['sheet1.xml'];
-						$('row c[r^="B"]', sheet).attr( 's', '2' );
-					}
-				}
-			],
-			"language": {
-				"url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
-			},
-		} );
-
-		$('#html5-extension3').DataTable( {
+		$('#html5-extension2').DataTable({
             dom: '<"row"<"col-md-12"<"row"<"col-md-6"B><"col-md-6"f> > ><"col-md-12"rt> <"col-md-12"<"row"<"col-md-5 mb-md-0 mb-5"i><"col-md-7"p>>> >',
             buttons: {
                 buttons: [
-                    { extend: 'excel', className: 'btn btn-fill btn-fill-dark btn-rounded mb-4 mr-3 btnExcel', text:"<img src='http://services.nikken.com.mx/retos/img/excel.png' width='15px'></img> <b>Exportar a Excel</b>",}
+                    { 
+						extend: 'excel', 
+						className: 'btn btn-fill btn-fill-dark btn-rounded mb-4 mr-3 btnExcel', 
+						text:"<img src='http://services.nikken.com.mx/retos/img/excel.png' width='15px'></img> Exportar a Excel",
+					}
                 ]
             },
             "language": {
@@ -2605,7 +2625,252 @@
                 },
                 "info": "Showing page _PAGE_ of _PAGES_"
             }
-        } );
+        });
+
+		var winPuntosV = "";
+
+        function getWinnPuntosV(){
+            $.ajax({
+                type: 'get',
+                url: '/getPuVi',
+                success: function(result) {
+                    winPuntosV = result.split(':');
+                }
+            });
+        }
+
+        getWinnPuntosV();
+
+        function searchCurrentAbiCode(abicode){
+            for(x = 0; x < winPuntosV.length; x++){
+                if(abicode == winPuntosV[x]){
+                    return true;
+                    break;
+                }
+            }
+        }
+
+		var rangos = ['DIR', 'DIR', 'SUP', 'EXE', 'BRC', 'PLA', 'ORO', 'PLO', 'DIA', 'DRL'];
+
+		$('#html5-extension3').DataTable({
+			destroy: true,
+			ajax: "/genconvnypers?associateid=" + {{ $associateid }},
+			columns: [
+				{ data: 'associateid', },
+				{ data: 'nivel', },
+				{ data: 'NameAssociate', },
+				{ 
+					data: 'Rango_ini', 
+					"render": function (data, type, row) {
+						return rangos[row.Rango_ini];
+					},
+				},
+				{ 
+					data: 'Pais',
+					"render": function(data, type, row){
+						if(row.Pais == ""){
+							return "México";
+						}
+						else if(row.Pais == 'LAT'){
+							return "<img src='../convassets/img/flag/mexico.png' width='25%'><br>México";
+						}
+						else if(row.Pais == 'COL'){
+							return "<img src='../convassets/img/flag/colombia.png' width='25%'><br>Colombia";
+						}
+						else if(row.Pais == 'CRI'){
+							return "<img src='../convassets/img/flag/costarica.png' width='25%'><br>Costa Rica";
+						}
+						else if(row.Pais == 'PAN'){
+							return "<img src='../convassets/img/flag/panama.png' width='25%'><br>Panamá";
+						}
+						else if(row.Pais == 'ECU'){
+							return "<img src='../convassets/img/flag/ecuador.png' width='25%'><br>Ecuador";
+						}
+						else if(row.Pais == 'PER'){
+							return "<img src='../convassets/img/flag/peru.png' width='25%'><br>Perú";
+						}
+						else if(row.Pais == 'SLV'){
+							return "<img src='../convassets/img/flag/salvador.png' width='25%'><br>El Salvador";
+						}
+						else if(row.Pais == 'GTM'){
+							return "<img src='../convassets/img/flag/guatemala.png' width='25%'><br>Guatemala";
+						}
+						else if(row.Pais == 'CHL'){
+							return "<img src='../convassets/img/flag/chile.png' width='25%'><br>Chile";
+						}
+					},
+				},
+				{ 
+					data: 'Rango_max',
+					"render": function (data, type, row){
+						if(row.Rango_max >= 5){
+							return "<span class='flaticon-fill-tick' style='color: green;'></span> <span hidden>Si</span>";
+						}
+						else{
+							return "<span class='flaticon-close-fill' style='color: red;'></span> <span hidden>NO</span>";
+						}
+					}
+				},
+				{ 
+					data: 'Rango_max',
+					"render": function (data, type, row) {
+						return rangos[row.Rango_max];
+					},
+				},
+				{ data: 'VpAcumulado' },
+				{ data: 'VGPAcumulado' },
+				{ data: 'VGP_PuntosV' },
+				{ data: 'VGP_Retos' },
+				{ data: 'VGP_Ranking' },
+				{ data: 'Total_Incorpo' },
+				{ data: 'Incorp_VP100' },
+				{ data: 'KINYA_GP' },
+				{ 
+					data: 'Rango_max',
+					"render": function (data, type, row){
+						var puntosV = searchCurrentAbiCode(row.Associateid);
+                        var tipoConv = "";
+                        if(row.Rango_max < 5){
+                            tipoConv = "Directo a Ejecutivo";
+                        }
+                        else{
+                            tipoConv = "Plata en Adelante";
+                        }
+                        if(puntosV == true){
+                            tipoConv = "Puntos Viaje";
+                        }
+
+                        return tipoConv;
+					}
+				},
+				{ data: 'Estatus_Conv', }
+			],
+			dom: '<"row"<"col-md-12"<"row"<"col-md-6"B><"col-md-6"f> > ><"col-md-12"rt> <"col-md-12"<"row"<"col-md-5 mb-md-0 mb-5"i><"col-md-7"p>>> >',
+			buttons: [
+				{ 
+						extend: 'excel', 
+						className: 'btn btn-fill btn-fill-dark btn-rounded mb-4 mr-3 btnExcel', 
+						text:"<img src='http://services.nikken.com.mx/retos/img/excel.png' width='15px'></img> Exportar a Excel",
+				},
+				{
+					className: 'btn btn-fill btn-fill-dark btn-rounded mb-4 mr-3 btnExcel',
+					text:"<img src='../convassets/img/hide.png' width='18px'></img> Ocultar Genealogía",
+					action: function ( e, dt, node, config ) {
+						$('#genealogiaPersonal').hide(1000);
+					}
+				}
+			],
+			"language": {
+				"url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json"
+			},
+		});
+
+		$('#html5-extension4').DataTable({
+			destroy: true,
+			ajax: "/genconvny?associateid=" + {{ $associateid }},
+			columns: [
+				{ data: 'associateid', },
+				{ data: 'sponsorid', },
+				{ data: 'nivel', },
+				{ data: 'NameAssociate', },
+				{
+					data: 'Pais',
+					"render": function(data, type, row){
+						if(row.Pais == ""){
+							return "México";
+						}
+						else if(row.Pais == 'LAT'){
+							return "<img src='../convassets/img/flag/mexico.png' width='25%'><br>México";
+						}
+						else if(row.Pais == 'COL'){
+							return "<img src='../convassets/img/flag/colombia.png' width='25%'><br>Colombia";
+						}
+						else if(row.Pais == 'CRI'){
+							return "<img src='../convassets/img/flag/costarica.png' width='25%'><br>Costa Rica";
+						}
+						else if(row.Pais == 'PAN'){
+							return "<img src='../convassets/img/flag/panama.png' width='25%'><br>Panamá";
+						}
+						else if(row.Pais == 'ECU'){
+							return "<img src='../convassets/img/flag/ecuador.png' width='25%'><br>Ecuador";
+						}
+						else if(row.Pais == 'PER'){
+							return "<img src='../convassets/img/flag/peru.png' width='25%'><br>Perú";
+						}
+						else if(row.Pais == 'SLV'){
+							return "<img src='../convassets/img/flag/salvador.png' width='25%'><br>El Salvador";
+						}
+						else if(row.Pais == 'GTM'){
+							return "<img src='../convassets/img/flag/guatemala.png' width='25%'><br>Guatemala";
+						}
+						else if(row.Pais == 'CHL'){
+							return "<img src='../convassets/img/flag/chile.png' width='25%'><br>Chile";
+						}
+					},
+				},
+				{ 
+					data: 'Rango_ini',
+					"render": function (data, type, row) {
+						return rangos[row.Rango_ini];
+					},
+				},
+				{
+					data: 'Rango_max',
+					"render": function (data, type, row) {
+						return rangos[row.Rango_max];
+					},
+				},
+				{ data: 'VpAcumulado' },
+				{ data: 'VGPAcumulado' },
+				{ data: 'Total_Incorpo' },
+				{ data: 'Incorp_VP100' },
+				{ data: 'KINYA_GP' },
+				{
+					data: 'Rango_max',
+					"render": function (data, type, row){
+						var puntosV = searchCurrentAbiCode(row.Associateid);
+                        var tipoConv = "";
+                        if(row.Rango_max < 5){
+                            tipoConv = "Directo a Ejecutivo";
+                        }
+                        else{
+                            tipoConv = "Plata en Adelante";
+                        }
+                        if(puntosV == true){
+                            tipoConv = "Puntos Viaje";
+                        }
+
+                        return tipoConv;
+					}
+				},
+				{ data: 'Estatus_Conv', }
+			],
+            dom: '<"row"<"col-md-12"<"row"<"col-md-6"B><"col-md-6"f> > ><"col-md-12"rt> <"col-md-12"<"row"<"col-md-5 mb-md-0 mb-5"i><"col-md-7"p>>> >',
+            buttons: {
+                buttons: [
+                    { 
+						extend: 'excel', 
+						className: 'btn btn-fill btn-fill-dark btn-rounded mb-4 mr-3 btnExcel', 
+						text:"<img src='http://services.nikken.com.mx/retos/img/excel.png' width='15px'></img> Exportar a Excel",
+					},
+					{
+						className: 'btn btn-fill btn-fill-dark btn-rounded mb-4 mr-3 btnExcel',
+						text:"<img src='../convassets/img/hide.png' width='18px'></img> Ocultar Genealogía",
+						action: function ( e, dt, node, config ) {
+							$('#genealogiaOrganizacional').hide(1000);
+						}
+					}
+                ]
+            },
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json",
+                "paginate": {
+                    "previous": "<i class='flaticon-arrow-left-1'></i>",
+                    "next": "<i class='flaticon-arrow-right'></i>"
+                },
+                "info": "Showing page _PAGE_ of _PAGES_"
+            }
+        });
 		
 		$('#requisitosSection').on('click', function(event) {
 			var target = $(this.getAttribute('href'));

@@ -37,4 +37,61 @@ class convController extends Controller{
 
         return \view('convocatoria/index', compact('associateid', 'direjec', 'plaadel', 'estatuspersonal', 'vpperiodo1', 'vpperiodo2', 'vgpperiodo1', 'vgpperiodo2', 'incorporadosperiodo1', 'incorporadosperiodo2', 'kinyaperiodo1', 'kinyaperiodo2', 'genealogia', 'winPuntosV', 'estatuspersonalFormInfo', 'vpperiodo3', 'vgpperiodo3', 'incorporadosperiodo3', 'kinyaperiodo3'));
     }
+
+    public function genconvnypers(Request $request){
+        $associateid = $request->associateid;
+        $period = Date("Ym");
+
+        $conection = \DB::connection('sqlsrv');
+            $response = $conection->select("EXEC Gen_ConvNY_Pers $associateid, $period;");
+        \DB::disconnect('sqlsrv');
+
+        $data = [
+            'data' => $response,
+        ];
+        return \Response::json($data);
+    }
+
+    public function genconvny(Request $request){
+        $associateid = $request->associateid;
+        $period = Date("Ym");
+
+        $conection = \DB::connection('sqlsrv');
+            $response = $conection->select("EXEC Gen_ConvNY $associateid");
+        \DB::disconnect('sqlsrv');
+
+        $data = [
+            'data' => $response,
+        ];
+        return \Response::json($data);
+    }
+
+    public function getPuVi(Request $request){
+        $conection = \DB::connection('sqlsrv');
+            $response = $conection->select("SELECT DISTINCT Associateid FROM RankingGral WHERE Count_PuntosV >= 10;");
+        \DB::disconnect('sqlsrv');
+
+        $pvwinners = "";
+
+        foreach($response as $row){
+            $pvwinners = $pvwinners . $row->Associateid . ":";
+        }
+
+        return $pvwinners;
+    }
+
+    public function repoconvny(){
+        return view('convocatoria.reporte');
+    }
+
+    public function reportegral(){
+        $conection = \DB::connection('sqlsrv');
+            $response = $conection->select("SELECT * FROM ReportConv_NY");
+        \DB::disconnect('sqlsrv');
+
+        $data = [
+            'data' => $response,
+        ];
+        return \Response::json($data);
+    }
 }
