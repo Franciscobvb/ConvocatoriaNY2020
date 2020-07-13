@@ -208,18 +208,18 @@
 								</div>
 								<div class="col-lg-4"></div>
 								<div class="col-lg-4">
-									<a href="javascript:void(0)" class="btn btn-conv btn-rounded pt-3 pb-3 pl-5 pr-5 mt-3" role="button" data-toggle="modal" data-target=".bd-rankingDirPla-modal-xl" style="width: 100%">
-										Ranking Directo Ejecutivo
-									</a>
-								</div>
-								<div class="col-lg-4">
-									<a href="javascript:void(0)" class="btn btn-conv btn-rounded pt-3 pb-3 pl-5 pr-5 mt-3" role="button" data-toggle="modal" data-target=".bd-rankingPlaAdel-modal-xl" style="width: 100%">
-										Ranking Plata en Adelante
-									</a>
-								</div>
-								<div class="col-lg-4">
 									<a href="javascript:void(0)" class="btn btn-conv btn-rounded pt-3 pb-3 pl-5 pr-5 mt-3" role="button" data-toggle="modal" data-target=".bd-estatusper-modal-xl" style="width: 100%">
 										Estatus Personal
+									</a>
+								</div>
+								<div class="col-lg-4">
+									<a href="{{ asset('convassets/Ganadores_Convocatoria_2019-2020_New_York.pdf') }}" target="_new" class="btn btn-conv btn-rounded pt-3 pb-3 pl-5 pr-5 mt-3" role="button" style="width: 100%">
+										Ganadores
+									</a>
+								</div>
+								<div class="col-lg-4">
+									<a href="http://bit.ly/2GtXddZ" target="_new" class="btn btn-conv btn-rounded pt-3 pb-3 pl-5 pr-5 mt-3" role="button" style="width: 100%">
+										Compra aquí tus boletos
 									</a>
 								</div>
 								<div class="col-lg-12 mt-5">
@@ -434,6 +434,7 @@
 											<th>Ranking</th>
 											<th>VGP Ranking</th>
 											<th>VGP Puntos Viaje</th>
+											<th>VGP Campaña Navideña</th>
 											<th><p style="width: 200px">Nombre</p></th>
 											<th>Rango</th>
 											<th>País</th>
@@ -520,10 +521,11 @@
 													$trbgcolor = "background-color: #fff";
 												}
 											@endphp
-											<tr style="{{ $trbgcolor }}">
+											<tr style="{{ $trbgcolor }}" name="{{ $row->Associateid . " - " . $row->Nombre}}">
 												<td>{{ $ranknum }}</td>
 												<td><b>{{ number_format($row->VGP_Ranking) }}</b></td>
 												<td>{{ number_format($row->VGP_PuntosV) }}</td>
+												<td>{{ number_format($row->VGP_CampNavid) }}</td>
 												<td>{{ $row->Nombre }}</td>
 												<td class="text-center">
 													<span class="badge {{ $clase }}">
@@ -581,6 +583,7 @@
 											<th>Ranking</th>
 											<th>VGP Ranking</th>
 											<th>VGP Puntos Viaje</th>
+											<th>VGP Campaña Navideña</th>
 											<th>VGP Retos Especiales</th>
 											<th><p style="width: 200px">Nombre</p></th>
 											<th>Rango </th>
@@ -659,29 +662,18 @@
 												}
 
 												if($count <= 90){
-													/*if ($row->PuntosNY_10 >= 10){
-														$trbgcolor = "background-color: #dde5f7";
-													}
-													else if ($row->Reto_Especial == 1) {
-														$trbgcolor = "background-color: #bee1eb;";
-													}
-													else if ($row->Reto_Especial == 2){
-														$trbgcolor = "background-color: #f5c6cb";
-													}
-													else{
-														$trbgcolor = "background-color: #fff";
-													}*/
 													$trbgcolor = "background-color: #fde0e3";
 												}
 												else{
 													$trbgcolor = "background-color: #fff";
 												}
 											@endphp
-											<tr style="{{ $trbgcolor }}">
+											<tr style="{{ $trbgcolor }}" name="{{ $row->Associateid . " - " . $row->Nombre}}">
 												<td>{{ $ranknum }}</td>
 												<td><b>{{ number_format($row->VGP_Ranking) }}</b></td>
 												<td>{{ number_format($row->VGP_PuntosV) }}</td>
 												<td>{{ number_format($row->VGP_Retos) }}</td>
+												<td>{{ number_format($row->VGP_CampNavid) }}</td>
 												<td>{{ $row->Nombre }}</td>
 												<td class="text-center">
 													<span class="badge {{ $clase }}">
@@ -795,6 +787,17 @@
 												<input type="text" class="form-control-rounded-right form-control" readonly value="{{ number_format($row->VGPAcumulado) }}">
 											</div>
 										</div>
+										<div class="col-lg-6 m-auto">
+											<div class="input-group mb-4">
+												<div class="input-group-prepend">
+													<span class="input-group-text form-control-rounded-left">
+														VGP Campaña Navideña
+													</span>
+												</div>
+												<input type="text" class="form-control-rounded-right form-control" value="{{ number_format($row->VGP_CampNavid) }}" readonly>
+											</div>
+										</div>
+										<div class="col-lg-6 m-auto"></div>
 										<div class="col-lg-6">
 											<div class="input-group mb-4">
 												<div class="input-group-prepend">
@@ -821,15 +824,9 @@
 													}
 												@endphp
 												<input type="text" class="form-control-rounded-right form-control" value="{{ $tipoConvocatoria }}" readonly>
-												<li>
-													<a href="http://services.nikken.com.mx/repoconvny" target="_new">
-														<i class="fa fa-circle-o text-danger"></i> 
-														Convocatoria Nueva York 
-													</a>
-												</li>
 											</div>
 										</div>
-										<div class="col-lg-6">
+										<div class="col-lg-6" id="lugrank">
 											<div class="input-group mb-4">
 												<div class="input-group-prepend">
 													<span class="input-group-text form-control-rounded-left">
@@ -1062,8 +1059,9 @@
 															<th>Rango Actual</th>
 															<th>VP Acumulado</th>
 															<th>VGP Acumulado</th>
-															<th>Puntos VGP</th>
-															<th>VGP Retos</th>
+															<th>VGP Puntos Viaje</th>
+															<th>VGP Retos Especiales</th>
+															<th>VGP Campaña Navideña</th>
 															<th>VGP Ranking</th>
 															<th>Incorporados Frontales</th>
 															<th>Incorporados con VP 100</th>
@@ -1089,7 +1087,6 @@
 													<thead>
 														<tr class="text-center">
 															<th>Código</th>
-															<th>Código Patrocinador</th>
 															<th>Nivel</th>
 															<th><p style="width: 150px;">Nombre</p></th>
 															<th>País</th>
@@ -1097,6 +1094,10 @@
 															<th>Rango Actual</th>
 															<th>VP Acumulado</th>
 															<th>VGP Acumulado</th>
+															<th>VGP Puntos Viaje</th>
+															<th>VGP Retos Especiales</th>
+															<th>VGP Campaña Navideña</th>
+															<th>VGP Ranking</th>
 															<th>Incorporados Frontales</th>
 															<th>Incorporados con VP 100</th>
 															<th>KinYa! - Grupo Personal</th>
@@ -1172,7 +1173,7 @@
 														<div class="row">
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/alojamiento-hotel.png')}}" width="12%">
-																<p class="mb-1 mt-1">Alojamiento en acomodación doble en el <b>Hotel Sheraton de Times Square (7 días y 6 noches).</b></p>
+																<p class="mb-1 mt-1">Alojamiento en acomodación doble del 16 al 22 de Abril de 2020 en el <b>Hotel Sheraton de Times Square (7 días y 6 noches).</b></p>
 															</div>
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/entrada-convencion.png')}}" width="12%">
@@ -1246,7 +1247,7 @@
 														<div class="row">
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/alojamiento-hotel.png')}}" width="12%">
-																<p class="mb-1 mt-1">Alojamiento en acomodación doble en el <b>Hotel Sheraton de Times Square (4 días y 3 noches).</b> </p>
+																<p class="mb-1 mt-1">Alojamiento en acomodación doble del 19 al 22 de Abril de 2020 en el <b>Hotel Sheraton de Times Square (4 días y 3 noches).</b> </p>
 															</div>
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/entrada-convencion.png')}}" width="12%">
@@ -1442,7 +1443,7 @@
 														<div class="row">
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/alojamiento-hotel.png')}}" width="12%">
-																<p class="mb-1 mt-1">Alojamiento en acomodación doble en el <b>Hotel Sheraton de Times Square (7 días y 6 noches).</b></p>
+																<p class="mb-1 mt-1">Alojamiento en acomodación doble del 16 al 22 de Abril de 2020 en el <b>Hotel Sheraton de Times Square (7 días y 6 noches).</b></p>
 															</div>
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/entrada-convencion.png')}}" width="12%">
@@ -1608,7 +1609,7 @@
 														<div class="row">
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/alojamiento-hotel.png')}}" width="12%">
-																<p class="mb-1 mt-1">Alojamiento en acomodación doble en el <b>Hotel Sheraton de Times Square (4 días y 3 noches).</b></p>
+																<p class="mb-1 mt-1">Alojamiento en acomodación doble del 19 al 22 de Abril de 2020 en el <b>Hotel Sheraton de Times Square (4 días y 3 noches).</b></p>
 															</div>
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/entrada-convencion.png')}}" width="12%">
@@ -1802,7 +1803,7 @@
 														<div class="row">
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/alojamiento-hotel.png')}}" width="12%">
-																<p class="mb-1 mt-1">Alojamiento en acomodación doble en el <b>Hotel Sheraton de Times Square (7 días y 6 noches).</b></p>
+																<p class="mb-1 mt-1">Alojamiento en acomodación doble del 16 al 22 de Abril de 2020 en el <b>Hotel Sheraton de Times Square (7 días y 6 noches).</b></p>
 															</div>
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/entrada-convencion.png')}}" width="12%">
@@ -1965,7 +1966,7 @@
 														<div class="row">
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/alojamiento-hotel.png')}}" width="12%">
-																<p class="mb-1 mt-1">Alojamiento en acomodación doble en el <b>Hotel Sheraton de Times Square (4 días y 3 noches).</b></p>
+																<p class="mb-1 mt-1">Alojamiento en acomodación doble del 19 al 22 de Abril de 2020 en el <b>Hotel Sheraton de Times Square (4 días y 3 noches).</b></p>
 															</div>
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/entrada-convencion.png')}}" width="12%">
@@ -2163,7 +2164,7 @@
 														<div class="row">
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/alojamiento-hotel.png')}}" width="12%">
-																<p class="mb-1 mt-1">Alojamiento en acomodación doble en el <b>Hotel Sheraton de Times Square (8 días y 7 noches).</b></p>
+																<p class="mb-1 mt-1">Alojamiento en acomodación doble del 15 al 22 de Abril de 2020 en el <b>Hotel Sheraton de Times Square (8 días y 7 noches).</b></p>
 															</div>
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/entrada-convencion.png')}}" width="12%">
@@ -2326,7 +2327,7 @@
 														<div class="row">
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/alojamiento-hotel.png')}}" width="12%">
-																<p class="mb-1 mt-1">Alojamiento en acomodación doble en el <b>Hotel Sheraton de Times Square (4 días y 3 noches).</b></p>
+																<p class="mb-1 mt-1">Alojamiento en acomodación doble del 19 al 22 de Abril de 2020 en el <b>Hotel Sheraton de Times Square (4 días y 3 noches).</b></p>
 															</div>
 															<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 																<img src="{{ asset('convassets/img/icons/entrada-convencion.png')}}" width="12%">
@@ -2502,7 +2503,7 @@
 								<div class="row">
 									<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 										<img src="{{ asset('convassets/img/icons/alojamiento-hotel.png')}}" width="12%">
-										<p class="mb-1 mt-1">Alojamiento en acomodación doble en el <b>Hotel Sheraton de Times Square (4 días y 3 noches).</b></p>
+										<p class="mb-1 mt-1">Alojamiento en acomodación doble del 19 al 22 de Abril de 2020 en el <b>Hotel Sheraton de Times Square (4 días y 3 noches).</b></p>
 									</div>
 									<div class="col-xl-6 col-lg-6 col-md-6 site-content-inner text-center">
 										<img src="{{ asset('convassets/img/icons/entrada-convencion.png')}}" width="12%">
@@ -2721,6 +2722,7 @@
 				{ data: 'VGPAcumulado' },
 				{ data: 'VGP_PuntosV' },
 				{ data: 'VGP_Retos' },
+				{ data: 'VGP_CampNavid' },
 				{ data: 'VGP_Ranking' },
 				{ data: 'Total_Incorpo' },
 				{ data: 'Incorp_VP100' },
@@ -2770,7 +2772,6 @@
 			ajax: "/genconvny?associateid=" + {{ $associateid }},
 			columns: [
 				{ data: 'associateid', },
-				{ data: 'sponsorid', },
 				{ data: 'nivel', },
 				{ data: 'NameAssociate', },
 				{
@@ -2822,6 +2823,10 @@
 				},
 				{ data: 'VpAcumulado' },
 				{ data: 'VGPAcumulado' },
+				{ data: 'VGP_PuntosV' },
+				{ data: 'VGP_Retos' },
+				{ data: 'VGP_CampNavid' },
+				{ data: 'VGP_Ranking' },
 				{ data: 'Total_Incorpo' },
 				{ data: 'Incorp_VP100' },
 				{ data: 'KINYA_GP' },
@@ -2893,6 +2898,32 @@
 		}
 
 		setHora();
+
+		//var countDownDate = new Date("Jan 31, 2020 23:59:59").getTime();
+		var countDownDate = new Date("Jan 31, 2020 17:26:10").getTime();
+		var x = setInterval(function() {
+			// OBTENER la fecha y hora EN CURSO
+			var now = new Date().getTime();
+			
+			// CALCULA la DISTNCIA entre ahora y la fecha PARA la cuenta regresiva
+			var distance = countDownDate - now;
+			
+			// Cálculos de días, horas, minutos y segundos
+			var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+			var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+			var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+			var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+			console.log(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
+			
+			// Si LA DISTANCIA ENTRE LA FECHA ACTUAL Y LA FECHA LIMITE SON IGUALES, SE DEJA DE EJECUTAR EL CONTADOR Y OCULTA LA COLUMNA DE LOS BOTONES DE EMISION
+			if (distance < 0) {
+				clearInterval(x); // detiene el countdown
+				$("#rank1").hide();
+				$("#rank2").hide();
+				$("#lugrank").hide();
+			}
+		}, 1000);
 	</script>
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->

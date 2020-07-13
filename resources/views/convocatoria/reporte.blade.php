@@ -70,7 +70,7 @@
 						</div>
 					</div>
 				</nav>
-			</div>
+            </div>
 			
 			<div id="headerWrapper" class="" style="max-width: 95%; margin: auto">
 				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 bg-white mb-5" style="border-radius: 15px;">
@@ -78,6 +78,7 @@
                         <table id="reporteConvocatoria" class="table table-striped table-bordered table-hover" >
                             <thead>
                                 <tr class="">
+                                    <th># Ranking</th>
                                     <th>Associateid</th>
                                     <th><p style="width: 150px;">Nombre Asociado</p></th>
                                     <th>Rango_inicial</th>
@@ -92,6 +93,7 @@
                                     <th>VGP_Ene</th>
                                     <th>VGP_Acumulado</th>
                                     <th>VGP_PuntosV</th>
+                                    <th>VGP Campaña Navideña</th>
                                     <th>VGP_Retos</th>
                                     <th>VGP_Ranking</th>
                                     <th>VP_Nov</th>
@@ -158,6 +160,8 @@
 
         var rangos = ['DIR', 'DIR', 'SUP', 'EXE', 'BRC', 'PLA', 'ORO', 'PLO', 'DIA', 'DRL'];
         var winPuntosV = "";
+        var rankDirExe = "";
+        var rankPlaAdel = "";
 
         function getWinnPuntosV(){
             $.ajax({
@@ -171,10 +175,74 @@
 
         getWinnPuntosV();
 
+        function getRankDirExe(){
+            $.ajax({
+                type: 'get',
+                url: '/getrankdirexe',
+                success: function(result) {
+                    rankDirExe = result.split(':');
+                }
+            });
+        }
+
+        getRankDirExe();
+
+        function getRankPlaAdel(){
+            $.ajax({
+                type: 'get',
+                url: '/getrankplaadel',
+                success: function(result) {
+                    rankPlaAdel = result.split(':');
+                }
+            });
+        }
+
+        getRankPlaAdel();
+
+        function number_format(number, decimals, dec_point, thousands_point) {
+            if (number == null || !isFinite(number)) {
+                throw new TypeError("number is not valid");
+            }
+            if (!decimals) {
+                var len = number.toString().split('.').length;
+                decimals = len > 1 ? len : 0;
+            }
+            if (!dec_point) {
+                dec_point = '.';
+            }
+            if (!thousands_point) {
+                thousands_point = ',';
+            }
+            number = parseFloat(number).toFixed(decimals);
+            number = number.replace(".", dec_point);
+            var splitNum = number.split(dec_point);
+            splitNum[0] = splitNum[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousands_point);
+            number = splitNum.join(dec_point);
+            return number;
+        }
+
         function searchCurrentAbiCode(abicode){
             for(x = 0; x < winPuntosV.length; x++){
                 if(abicode == winPuntosV[x]){
                     return true;
+                    break;
+                }
+            }
+        }
+
+        function getNumRankDirExe(abicode){
+            for(x = 0; x < rankDirExe.length; x++){
+                if(abicode == rankDirExe[x]){
+                    return x + 1;
+                    break;
+                }
+            }
+        }
+
+        function getNumRankPlaAdel(abicode){
+            for(x = 0; x < rankPlaAdel.length; x++){
+                if(abicode == rankPlaAdel[x]){
+                    return x + 1;
                     break;
                 }
             }
@@ -185,6 +253,27 @@
 			ajax: "/reportegral",
             processing: true,
 			columns: [
+				{
+                    data: 'Associateid',
+                    "render": function(data, type, row){
+                        var numRankPlaAdel = getNumRankPlaAdel(row.Associateid);
+                        
+                        if(numRankPlaAdel != null || numRankPlaAdel != undefined){
+                            return numRankPlaAdel;
+                        }
+                        else{
+                            numRankPlaAdel = "No participa";
+                            var numRankDirExe = getNumRankDirExe(row.Associateid);
+
+                            if(numRankDirExe != null || numRankDirExe != undefined){
+                                return numRankDirExe;
+                            }
+                            else{
+                                return numRankPlaAdel;
+                            }
+                        }
+                    }
+                },
 				{ data: 'Associateid', },
 				{ data: 'AssociateName', },
 				{ 
@@ -241,7 +330,7 @@
                     "render": function(data, type, row){
                         var puntosV = searchCurrentAbiCode(row.Associateid);
                         var tipoConv = "";
-                        if(row.Rango_max < 5){
+                        if(row.Rango_ini < 5){
                             tipoConv = "Directo a Ejecutivo";
                         }
                         else{
@@ -271,31 +360,176 @@
                         }
                     }
                 },
-				{ data: 'VGP_Nov' },
-                { data: 'VGP_Dic' },
-                { data: 'VGP_Ene' },
-                { data: 'VGP_Acumulado' },
-                { data: 'VGP_PuntosV' },
-                { data: 'VGP_Retos' },
-                { data: 'VGP_Ranking' },
-                { data: 'VP_Nov' },
-                { data: 'VP_Dic' },
-                { data: 'VP_Ene' },
-                { data: 'VP_Acumulado' },
-                { data: 'Inc_Nov' },
-                { data: 'Inc_Dic' },
-                { data: 'Inc_Ene' },
-                { data: 'Inc_Total' },
-                { data: 'Inc_Nov_100' },
-                { data: 'Inc_Dic_100' },
-                { data: 'Inc_Ene_100' },
-                { data: 'Inc_100_Total' },
-                { data: 'Kinya_Nov' },
-                { data: 'Kinya_Dic' },
-                { data: 'Kinya_Ene' },
-                { data: 'Kinya_Total' },
-                { data: 'Sponsorid' },
-                { data: 'SponsorName' },
+				{
+                    data: 'VGP_Nov',
+                    "render": function(data, type, row){
+                        var VGP_Nov = number_format(row.VGP_Nov, 2, '.', ',');
+                        return VGP_Nov;
+                    }
+                },
+                {
+                    data: 'VGP_Dic',
+                    "render": function(data, type, row){
+                        var VGP_Dic = number_format(row.VGP_Dic, 2, '.', ',');
+                        return VGP_Dic;
+                    }
+                },
+                {
+                    data: 'VGP_Ene',
+                    "render": function(data, type, row){
+                        var VGP_Ene = number_format(row.VGP_Ene, 2, '.', ',');
+                        return VGP_Ene;
+                    }
+                },
+                {
+                    data: 'VGP_Acumulado',
+                    "render": function(data, type, row){
+                        var VGP_Acumulado = number_format(row.VGP_Acumulado, 2, '.', ',');
+                        return VGP_Acumulado;
+                    }
+                },
+                {
+                    data: 'VGP_PuntosV',
+                    "render": function(data, type, row){
+                        var VGP_PuntosV = number_format(row.VGP_PuntosV, 2, '.', ',');
+                        return VGP_PuntosV;
+                    }
+                },
+                {
+                    data: 'VGP_CampNavid',
+                    "render": function(data, type, row){
+                        var VGP_CampNavid = number_format(row.VGP_CampNavid, 2, '.', ',');
+                        return VGP_CampNavid;
+                    }
+                },
+                {
+                    data: 'VGP_Retos',
+                    "render": function(data, type, row){
+                        var VGP_Retos = number_format(row.VGP_Retos, 2, '.', ',');
+                        return VGP_Retos;
+                    }
+                },
+                {
+                    data: 'VGP_Ranking',
+                    "render": function(data, type, row){
+                        var VGP_Ranking = number_format(row.VGP_Ranking, 2, '.', ',');
+                        return VGP_Ranking;
+                    }
+                },
+                {
+                    data: 'VP_Nov',
+                    "render": function(data, type, row){
+                        var VP_Nov = number_format(row.VP_Nov, 2, '.', ',');
+                        return VP_Nov;
+                    }
+                },
+                {
+                    data: 'VP_Dic',
+                    "render": function(data, type, row){
+                        var VP_Dic = number_format(row.VP_Dic, 2, '.', ',');
+                        return VP_Dic;
+                    }
+                },
+                {
+                    data: 'VP_Ene',
+                    "render": function(data, type, row){
+                        var VP_Ene = number_format(row.VP_Ene, 2, '.', ',');
+                        return VP_Ene;
+                    }
+                },
+                {
+                    data: 'VP_Acumulado',
+                    "render": function(data, type, row){
+                        var VP_Acumulado = number_format(row.VP_Acumulado, 2, '.', ',');
+                        return VP_Acumulado;
+                    }
+                },
+                {
+                    data: 'Inc_Nov',
+                    "render": function(data, type, row){
+                        var Inc_Nov = number_format(row.Inc_Nov, 2, '.', ',');
+                        return Inc_Nov;
+                    }
+                },
+                {
+                    data: 'Inc_Dic',
+                    "render": function(data, type, row){
+                        var Inc_Dic = number_format(row.Inc_Dic, 2, '.', ',');
+                        return Inc_Dic;
+                    }
+                },
+                {
+                    data: 'Inc_Ene',
+                    "render": function(data, type, row){
+                        var Inc_Ene = number_format(row.Inc_Ene, 2, '.', ',');
+                        return Inc_Ene;
+                    }
+                },
+                {
+                    data: 'Inc_Total',
+                    "render": function(data, type, row){
+                        var Inc_Total = number_format(row.Inc_Total, 2, '.', ',');
+                        return Inc_Total;
+                    }
+                },
+                {
+                    data: 'Inc_Nov_100',
+                    "render": function(data, type, row){
+                        var Inc_Nov_100 = number_format(row.Inc_Nov_100, 2, '.', ',');
+                        return Inc_Nov_100;
+                    }
+                },
+                {
+                    data: 'Inc_Dic_100',
+                    "render": function(data, type, row){
+                        var Inc_Dic_100 = number_format(row.Inc_Dic_100, 2, '.', ',');
+                        return Inc_Dic_100;
+                    }
+                },
+                {
+                    data: 'Inc_Ene_100',
+                    "render": function(data, type, row){
+                        var Inc_Ene_100 = number_format(row.Inc_Ene_100, 2, '.', ',');
+                        return Inc_Ene_100;
+                    }
+                },
+                {
+                    data: 'Inc_100_Total',
+                    "render": function(data, type, row){
+                        var Inc_100_Total = number_format(row.Inc_100_Total, 2, '.', ',');
+                        return Inc_100_Total;
+                    }
+                },
+                {
+                    data: 'Kinya_Nov',
+                    "render": function(data, type, row){
+                        var Kinya_Nov = number_format(row.Kinya_Nov, 2, '.', ',');
+                        return Kinya_Nov;
+                    }
+                },
+                {
+                    data: 'Kinya_Dic',
+                    "render": function(data, type, row){
+                        var Kinya_Dic = number_format(row.Kinya_Dic, 2, '.', ',');
+                        return Kinya_Dic;
+                    }
+                },
+                {
+                    data: 'Kinya_Ene',
+                    "render": function(data, type, row){
+                        var Kinya_Ene = number_format(row.Kinya_Ene, 2, '.', ',');
+                        return Kinya_Ene;
+                    }
+                },
+                {
+                    data: 'Kinya_Total',
+                    "render": function(data, type, row){
+                        var Kinya_Total = number_format(row.Kinya_Total, 2, '.', ',');
+                        return Kinya_Total;
+                    }
+                },
+                { data: 'Sponsorid', },
+                { data: 'SponsorName', },
 			],
             dom: '<"row"<"col-md-12"<"row"<"col-md-6"B><"col-md-6"f> > ><"col-md-12"rt> <"col-md-12"<"row"<"col-md-5 mb-md-0 mb-5"i><"col-md-7"p>>> >',
             buttons: {
@@ -316,5 +550,16 @@
                 "info": "Showing page _PAGE_ of _PAGES_"
             }
         });
-	</script>
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-155730359-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'UA-155730359-1');
+    </script>
+
 </html>
